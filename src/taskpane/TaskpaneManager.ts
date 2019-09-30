@@ -1,7 +1,10 @@
 import CitationFinder from './CitationFinder';
 
-// use JavaScript regex to find the culprits
-// then search specifically for them using the word api (and highlight)
+async function getFinder(context: Word.RequestContext): Promise<CitationFinder> {
+  context.document.body.load('text');
+  await context.sync();
+  return new CitationFinder(context.document.body.text);
+}
 
 class TaskpaneManager {
   bind() {
@@ -11,31 +14,26 @@ class TaskpaneManager {
 
   async count() {
     return Word.run(async context => {
-      context.document.body.load('text');
-      await context.sync();
-
-      const finder = new CitationFinder(context.document.body.text);
+      const finder = await getFinder(context);
       document.getElementById('count-summary').innerHTML = finder.htmlMessage;
-
       await context.sync();
     }).catch(console.log);
   }
 
   async highlight() {
     return Word.run(async context => {
-      context.document.body.load('text');
-      await context.sync();
+      const finder = await getFinder(context);
 
-      // const searchResults = context.document.body.search(passiveCitationRegExp, { matchWildcards: true });
-      // searchResults.load('font');
-      // await context.sync();
+      for (let citation of finder.all) {
+        const result = context.document.body.search(citation).load('font');
+        await context.sync();
 
-      // searchResults.items.forEach(item => {
-      //   item.font.highlightColor = 'Yellow';
-      //   item.font.bold = true;
-      // });
-
-      // await context.sync();
+        result.items.forEach(item => {
+          item.font.highlightColor = 'Yellow';
+          item.font.bold = true;
+        });
+        await context.sync();
+      }
     }).catch(console.log);
   }
 }

@@ -29,6 +29,10 @@ class CitationFinder {
     this._unique = new Set(this._all.map(citation => citation.replace(/\(|\)|,/g, '')));
   }
 
+  get all() {
+    return this._all;
+  }
+
   get total(): number {
     return this._all.length;
   }
