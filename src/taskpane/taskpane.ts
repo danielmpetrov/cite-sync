@@ -5,7 +5,7 @@ Office.onReady(info => {
     document.getElementById('sideload-msg').style.display = 'none';
     document.getElementById('app-body').style.display = 'flex';
     document.getElementById('btn-count').onclick = count;
-    document.getElementById('btn-highlight').onclick = highlight;
+    document.getElementById('btn-highlight').onclick = findReferences;
   }
 });
 
@@ -40,4 +40,28 @@ async function highlight() {
     result.items[0].select();
     await context.sync();
   }).catch(console.log);
+}
+
+async function findReferences() {
+  return Word.run(async context => {
+    const paragraphs = context.document.body.paragraphs.load('text');
+    await context.sync();
+
+    let bibIndex = 0;
+    for (let i = 0; i < paragraphs.items.length; i++) {
+      const paragraph = paragraphs.items[i].text.trim();
+      if (/^(bibliography|references)$/gim.test(paragraph)) {
+        bibIndex = i;
+        break;
+      }
+    }
+
+    const references: string[] = [];
+    for (let i = bibIndex + 1; i < paragraphs.items.length; i++) {
+      const reference = paragraphs.items[i].text.trim();
+      if (reference) {
+        references.push(reference);
+      }
+    }
+  });
 }
