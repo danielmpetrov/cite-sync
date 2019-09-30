@@ -7,8 +7,8 @@
 // (Joe, Doe and Borg, 2019) - 3 authors
 // (Doe et al., 2019) - 4+ authors
 
-// const citationPattern = '[(][!)]@, [0-9]{4}[)]';
-const citationPattern: string = '[A-z]@ [(][0-9]{4}[)]';
+const activeCitationRegExp: RegExp = /([A-z.]+(, | and | et al\.)?){1,3} \(\d{4}\)/g;
+const passiveCitationRegExp: RegExp = /\(([A-z ,.&]+, \d{4}(; )?)+\)/g;
 
 // Active Citation
 // Doe (2019) - 1 author
@@ -33,16 +33,17 @@ class TaskpaneManager {
     return Word.run(async context => {
       context.document.body.load('text');
       await context.sync();
-      console.log(context.document.body.text);
-      const searchResults = context.document.body.search(citationPattern, { matchWildcards: true });
-      searchResults.load('text');
-      await context.sync();
 
-      const total = searchResults.items.length;
-      const uniqueSet = new Set(searchResults.items.map(item => item.text));
+      const text: string = context.document.body.text;
+      const citations = [
+        ...text.match(passiveCitationRegExp),
+        ...text.match(activeCitationRegExp)
+      ].map(citation => citation.replace(/\(|\)|,/g, ''));
+      const set = new Set(citations);
+
       const countSummary = document.getElementById('count-summary');
       countSummary.innerHTML =
-        `Found <strong>${total}</strong> total (<strong>${uniqueSet.size}</strong> unique) in-text citation${total === 1 ? '' : 's'}.`;
+        `Found <strong>${citations.length}</strong> total (<strong>${set.size}</strong> unique) in-text citation${citations.length === 1 ? '' : 's'}.`;
 
       await context.sync();
     }).catch(console.log);
@@ -53,16 +54,16 @@ class TaskpaneManager {
       context.document.body.load('text');
       await context.sync();
 
-      const searchResults = context.document.body.search(citationPattern, { matchWildcards: true });
-      searchResults.load('font');
-      await context.sync();
+      // const searchResults = context.document.body.search(passiveCitationRegExp, { matchWildcards: true });
+      // searchResults.load('font');
+      // await context.sync();
 
-      searchResults.items.forEach(item => {
-        item.font.highlightColor = 'Yellow';
-        item.font.bold = true;
-      });
+      // searchResults.items.forEach(item => {
+      //   item.font.highlightColor = 'Yellow';
+      //   item.font.bold = true;
+      // });
 
-      await context.sync();
+      // await context.sync();
     }).catch(console.log);
   }
 }
