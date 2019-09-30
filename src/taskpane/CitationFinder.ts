@@ -26,7 +26,7 @@ class CitationFinder {
   private _unique: Set<string>;
 
   constructor(private text: string) {
-    this._all = this.text.match(citationRegex);
+    this._all = this.text.match(citationRegex) || [];
     this._unique = new Set(this._all.map(citation => citation.replace(/\(|\)|,/g, '')));
   }
 
