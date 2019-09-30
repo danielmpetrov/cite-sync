@@ -16,8 +16,9 @@
 // page number, e.g. (Field, 2005, p. 14)
 // not dated, e.g (Smith, n.d.)
 
-const activeCitationRegExp: RegExp = /([A-z.]+(, | and | et al\.)?){1,3} \(\d{4}\)/g;
-const passiveCitationRegExp: RegExp = /\(([A-z ,.&]+, \d{4}(; )?)+\)/g;
+// const activeCitationRegExp: RegExp = /([A-z.]+(, | and | et al\.)?){1,3} \(\d{4}\)/g;
+// const passiveCitationRegExp: RegExp = /\(([A-z ,.&]+, \d{4}(; )?)+\)/g;
+const citationRegex: RegExp = /(([A-z.]+(, | and | et al\.)?){1,3} \(\d{4}\))|(\(([A-z ,.&]+, \d{4}(; )?)+\))/g;
 
 class CitationFinder {
 
@@ -25,7 +26,7 @@ class CitationFinder {
   private _unique: Set<string>;
 
   constructor(private text: string) {
-    this._all = [...this.text.match(passiveCitationRegExp), ...this.text.match(activeCitationRegExp)];
+    this._all = this.text.match(citationRegex);
     this._unique = new Set(this._all.map(citation => citation.replace(/\(|\)|,/g, '')));
   }
 
