@@ -101,6 +101,15 @@ describe('findCitations', () => {
     expect(citations[0]).toBe('(Field, 2005, p. 14)');
   });
 
+  test('should match active citation with page number', () => {
+    // Act
+    const citations = findCitations('Field (2005, p. 14) claims that Jest is a delightful JavaScript Testing Framework with a focus on simplicity.');
+
+    // Assert
+    expect(citations.length).toBe(1);
+    expect(citations[0]).toBe('Field (2005, p. 14)');
+  });
+
   test('should match not dated passive citation', () => {
     // Act
     const citations = findCitations('Jest is a delightful JavaScript Testing Framework with a focus on simplicity (Smith, n.d.).');

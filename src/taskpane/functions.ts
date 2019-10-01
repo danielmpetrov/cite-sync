@@ -1,5 +1,5 @@
 export function findCitations(text: string): ReadonlyArray<string> {
-  return text.match(/(([A-z.]+(, | and | et al\.)?){1,3} \((\d{4}|n\.d\.)\))|(\(([A-z ,.&]+, (\d{4}|n\.d\.)(; )?)+\))/g) || [];
+  return text.match(/(([A-z.]+(, | and | et al\.)?){1,3} \((\d{4}|n\.d\.)(, p\. \d{1,})?\))|(\(([A-z ,.&]+, (\d{4}|n\.d\.)(, p\. \d{1,})?(; )?)+\))/g) || [];
 }
 
 export function findUnique(citations: ReadonlyArray<string>): ReadonlySet<string> {
