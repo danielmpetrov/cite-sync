@@ -1,11 +1,6 @@
 import { findCitations, findUnique } from './functions';
 
-// ???
 // https://guides.libraries.psu.edu/apaquickguide/intext
-// multiple citations, e.g. (Derwing, Rossiter, & Munro, 2002; Thomas, 2004)
-// page number, e.g. (Field, 2005, p. 14)
-// not dated, e.g (Smith, n.d.)
-
 describe('findCitations', () => {
   test('when given empty string, should return empty array', () => {
     // Act
@@ -85,6 +80,43 @@ describe('findCitations', () => {
     // Assert
     expect(citations.length).toBe(1);
     expect(citations[0]).toBe('Doe et al. (2019)');
+  });
+
+  test('should match multiple citation separated by ;', () => {
+    // Act
+    const citations = findCitations('Jest is a delightful JavaScript Testing Framework with a focus on simplicity (Derwing, Rossiter and Munro, 2002; Thomas, 2004).');
+
+    // Assert
+    expect(citations.length).toBe(2);
+    expect(citations[0]).toBe('(Derwing, Rossiter and Munro, 2002)');
+    expect(citations[1]).toBe('(Thomas, 2004)');
+  });
+
+  test('should match passive citation with page number', () => {
+    // Act
+    const citations = findCitations('Jest is a delightful JavaScript Testing Framework with a focus on simplicity (Field, 2005, p. 14).');
+
+    // Assert
+    expect(citations.length).toBe(1);
+    expect(citations[0]).toBe('(Field, 2005, p. 14)');
+  });
+
+  test('should match not dated passive citation', () => {
+    // Act
+    const citations = findCitations('Jest is a delightful JavaScript Testing Framework with a focus on simplicity (Smith, n.d.).');
+
+    // Assert
+    expect(citations.length).toBe(1);
+    expect(citations[0]).toBe('(Smith, n.d.)');
+  });
+
+  test('should match not dated active citation', () => {
+    // Act
+    const citations = findCitations('Smith (n.d.) claims that Jest is a delightful JavaScript Testing Framework with a focus on simplicity.');
+
+    // Assert
+    expect(citations.length).toBe(1);
+    expect(citations[0]).toBe('Smith (n.d.)');
   });
 });
 
