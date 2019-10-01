@@ -1,11 +1,11 @@
-import { findCitations, findUnique, htmlMessage } from './functions';
+import { findCitations, findUnique, htmlMessage, parseWordParagraphs } from './functions';
 
 Office.onReady(info => {
   if (info.host === Office.HostType.Word) {
     document.getElementById('sideload-msg').style.display = 'none';
     document.getElementById('app-body').style.display = 'flex';
     document.getElementById('btn-count').onclick = count;
-    document.getElementById('btn-highlight').onclick = highlight;
+    document.getElementById('btn-highlight').onclick = findReferences;
   }
 });
 
@@ -47,24 +47,11 @@ async function highlight() {
 
 async function findReferences() {
   return Word.run(async context => {
-    const paragraphs = context.document.body.paragraphs.load('text');
+    const wordParagraphs = context.document.body.paragraphs.load('text');
     await context.sync();
 
-    let bibIndex = 0;
-    for (let i = 0; i < paragraphs.items.length; i++) {
-      const paragraph = paragraphs.items[i].text.trim();
-      if (/^(bibliography|references)$/gim.test(paragraph)) {
-        bibIndex = i;
-        break;
-      }
-    }
+    const [paragraphs, references] = parseWordParagraphs(wordParagraphs.items);
 
-    const references: string[] = [];
-    for (let i = bibIndex + 1; i < paragraphs.items.length; i++) {
-      const reference = paragraphs.items[i].text.trim();
-      if (reference) {
-        references.push(reference);
-      }
-    }
+    console.log(paragraphs, references);
   });
 }

@@ -32,3 +32,15 @@ export function findUnique(citations: ReadonlyArray<string>): ReadonlySet<string
 export function htmlMessage(total: number, unique: number): string {
   return `Found <strong>${total}</strong> total (<strong>${unique}</strong> unique) in-text citation${total === 1 ? '' : 's'}.`;
 }
+
+export function parseWordParagraphs(wordParagraphs: ReadonlyArray<Word.Paragraph>): [ReadonlyArray<string>, ReadonlyArray<string>] {
+  const all: ReadonlyArray<string> = wordParagraphs
+    .map(wordParagraph => wordParagraph.text.trim())
+    .filter(paragraph => paragraph.length > 0);
+
+  const index = all.findIndex(paragraph => /^(bibliography|references)$/gim.test(paragraph));
+  const paragraphs = all.slice(0, index);
+  const references = all.slice(index + 1)
+
+  return [paragraphs, references];
+}
