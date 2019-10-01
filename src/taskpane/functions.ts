@@ -20,31 +20,15 @@
 // const passiveCitationRegExp: RegExp = /\(([A-z ,.&]+, \d{4}(; )?)+\)/g;
 const citationRegex: RegExp = /(([A-z.]+(, | and | et al\.)?){1,3} \(\d{4}\))|(\(([A-z ,.&]+, \d{4}(; )?)+\))/g;
 
-class CitationFinder {
-
-  private _all: string[];
-  private _unique: Set<string>;
-
-  constructor(private text: string) {
-    this._all = this.text.match(citationRegex) || [];
-    this._unique = new Set(this._all.map(citation => citation.replace(/\(|\)|,/g, '')));
-  }
-
-  get all() {
-    return this._all;
-  }
-
-  get total(): number {
-    return this._all.length;
-  }
-
-  get unique(): number {
-    return this._unique.size;
-  }
-
-  get htmlMessage(): string {
-    return `Found <strong>${this.total}</strong> total (<strong>${this.unique}</strong> unique) in-text citation${this.total === 1 ? '' : 's'}.`;
-  }
+export function findCitations(text: string): ReadonlyArray<string> {
+  return text.match(citationRegex) || [];
 }
 
-export default CitationFinder;
+export function findUnique(citations: ReadonlyArray<string>): ReadonlySet<string> {
+  const filtered = citations.map(citation => citation.replace(/\(|\)|,/g, ''));
+  return new Set(filtered);
+}
+
+export function htmlMessage(total: number, unique: number): string {
+  return `Found <strong>${total}</strong> total (<strong>${unique}</strong> unique) in-text citation${total === 1 ? '' : 's'}.`;
+}
