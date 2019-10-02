@@ -1,7 +1,7 @@
-import { findCitations, findUnique } from './functions';
+import { findCitations, findUnique, htmlMessage } from './functions';
 
 // https://guides.libraries.psu.edu/apaquickguide/intext
-describe('findCitations', () => {
+describe(findCitations, () => {
   test('when given empty string, should return empty array', () => {
     // Act
     const citations = findCitations('');
@@ -145,7 +145,7 @@ describe('findCitations', () => {
   });
 });
 
-describe('findUnique', () => {
+describe(findUnique, () => {
   test('when given empty array, should return empty set', () => {
     // Act
     const unique = findUnique([]);
@@ -184,5 +184,31 @@ describe('findUnique', () => {
 
     // Assert
     expect(unique.size).toBe(1);
+  });
+});
+
+describe(htmlMessage, () => {
+  test('when given no citations, should return correct message', () => {
+    // Act
+    const message = htmlMessage(0, 0);
+
+    // Assert
+    expect(message).toBe('Found <strong>0</strong> total (<strong>0</strong> unique) in-text citations.');
+  });
+
+  test('when given single citation, should return correct message', () => {
+    // Act
+    const message = htmlMessage(1, 1);
+
+    // Assert
+    expect(message).toBe('Found <strong>1</strong> total (<strong>1</strong> unique) in-text citation.');
+  });
+
+  test('when given multiple citations, should return correct message', () => {
+    // Act
+    const message = htmlMessage(5, 3);
+
+    // Assert
+    expect(message).toBe('Found <strong>5</strong> total (<strong>3</strong> unique) in-text citations.');
   });
 });
