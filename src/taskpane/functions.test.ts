@@ -80,6 +80,24 @@ describe(findCitations, () => {
     expect(citations[0]).toBe('Joe, Doe and Borg (2019)');
   });
 
+  test('should match passive triple author citation with oxford comma', () => {
+    // Act
+    const citations = findCitations('Jest is a delightful JavaScript Testing Framework with a focus on simplicity (Joe, Doe, and Borg, 2019).');
+
+    // Act
+    expect(citations.length).toBe(1);
+    expect(citations[0]).toBe('(Joe, Doe, and Borg, 2019)');
+  });
+
+  test('should match active triple author citation with oxford comma', () => {
+    // Act
+    const citations = findCitations('Joe, Doe, and Borg (2019) claim that Jest is a delightful JavaScript Testing Framework with a focus on simplicity.');
+
+    // Assert
+    expect(citations.length).toBe(1);
+    expect(citations[0]).toBe('Joe, Doe, and Borg (2019)');
+  });
+
   test('should match passive et al. citation', () => {
     // Act
     const citations = findCitations('Jest is a delightful JavaScript Testing Framework with a focus on simplicity (Doe et al., 2019).');
