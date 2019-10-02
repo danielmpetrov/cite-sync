@@ -10,6 +10,22 @@ describe('findCitations', () => {
     expect(citations.length).toBe(0);
   });
 
+  test('when given undefined, should return empty array', () => {
+    // Act
+    const citations = findCitations(undefined);
+
+    // Assert
+    expect(citations.length).toBe(0);
+  });
+
+  test('when given null, should return empty array', () => {
+    // Act
+    const citations = findCitations(null);
+
+    // Assert
+    expect(citations.length).toBe(0);
+  });
+
   test('should match passive single author citation', () => {
     // Act
     const citations = findCitations('Jest is a delightful JavaScript Testing Framework with a focus on simplicity (Doe, 2019).');
@@ -133,6 +149,22 @@ describe('findUnique', () => {
   test('when given empty array, should return empty set', () => {
     // Act
     const unique = findUnique([]);
+
+    // Assert
+    expect(unique.size).toBe(0);
+  });
+
+  test('when given null, should return empty set', () => {
+    // Act
+    const unique = findUnique(null);
+
+    // Assert
+    expect(unique.size).toBe(0);
+  });
+
+  test('when given undefined, should return empty set', () => {
+    // Act
+    const unique = findUnique(undefined);
 
     // Assert
     expect(unique.size).toBe(0);

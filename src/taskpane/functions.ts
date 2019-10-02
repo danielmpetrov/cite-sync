@@ -1,8 +1,16 @@
 export function findCitations(text: string): ReadonlyArray<string> {
+  if (!text) {
+    return [];
+  }
+
   return text.match(/(([A-z.]+(, | and | et al\.)?){1,3} \((\d{4}|n\.d\.)(, p\. \d{1,})?\))|(\(([A-z ,.&]+, (\d{4}|n\.d\.)(, p\. \d{1,})?(; )?)+\))/g) || [];
 }
 
 export function findUnique(citations: ReadonlyArray<string>): ReadonlySet<string> {
+  if (!citations) {
+    return new Set();
+  }
+
   const filtered = citations.map(citation => citation.replace(/\(|\)|,/g, ''));
   return new Set(filtered);
 }
