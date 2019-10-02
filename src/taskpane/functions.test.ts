@@ -1,4 +1,4 @@
-import { findCitations, findUnique, htmlMessage } from './functions';
+import { findCitations, findUnique, htmlMessage, parseWordParagraphs } from './functions';
 
 // https://guides.libraries.psu.edu/apaquickguide/intext
 describe(findCitations, () => {
@@ -210,5 +210,34 @@ describe(htmlMessage, () => {
 
     // Assert
     expect(message).toBe('Found <strong>5</strong> total (<strong>3</strong> unique) in-text citations.');
+  });
+});
+
+describe(parseWordParagraphs, () => {
+  test('when given empty array, should return empty paragraphs and references', () => {
+    // Act
+    const [paragraphs, references] = parseWordParagraphs([]);
+
+    // Assert
+    expect(paragraphs.length).toBe(0);
+    expect(references.length).toBe(0);
+  });
+
+  test('when given undefined, should return empty paragraphs and references', () => {
+    // Act
+    const [paragraphs, references] = parseWordParagraphs(undefined);
+
+    // Assert
+    expect(paragraphs.length).toBe(0);
+    expect(references.length).toBe(0);
+  });
+
+  test('when given null, should return empty paragraphs and references', () => {
+    // Act
+    const [paragraphs, references] = parseWordParagraphs(null);
+
+    // Assert
+    expect(paragraphs.length).toBe(0);
+    expect(references.length).toBe(0);
   });
 });
