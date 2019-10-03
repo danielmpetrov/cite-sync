@@ -237,13 +237,13 @@ describe(parseWordParagraphs, () => {
 describe(findOrphanedReferences, () => {
   test('when reference is cited, should return empty array', () => {
     // Act
-    const paragraphs = [
-      'Supervised algorithms appear to be the preferred method for short text classification (Alsmadi and Gan, 2019).'
+    const citations = [
+      '(Alsmadi and Gan, 2019)'
     ];
     const references = [
       'Alsmadi, I. and Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.'
     ];
-    const orphanedReferences = findOrphanedReferences(paragraphs, references);
+    const orphanedReferences = findOrphanedReferences(citations, references);
 
     // Assert
     expect(orphanedReferences.length).toBe(0);
@@ -251,13 +251,13 @@ describe(findOrphanedReferences, () => {
 
   test('when reference is not cited, should return array with the orphaned reference', () => {
     // Act
-    const paragraphs = [
-      'Supervised algorithms appear to be the preferred method for short text classification (Doe, 2019).'
+    const citations = [
+      '(Doe, 2019)'
     ];
     const references = [
       'Alsmadi, I. and Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.'
     ];
-    const orphanedReferences = findOrphanedReferences(paragraphs, references);
+    const orphanedReferences = findOrphanedReferences(citations, references);
 
     // Assert
     expect(orphanedReferences.length).toBe(1);
@@ -268,13 +268,13 @@ describe(findOrphanedReferences, () => {
 describe(findOrphanedCitations, () => {
   test('when citation is referenced, should return empty array', () => {
     // Act
-    const paragraphs = [
-      'Supervised algorithms appear to be the preferred method for short text classification (Alsmadi and Gan, 2019).'
+    const citations = [
+      '(Alsmadi and Gan, 2019)'
     ];
     const references = [
       'Alsmadi, I. and Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.'
     ];
-    const orphanedCitations = findOrphanedCitations(paragraphs, references);
+    const orphanedCitations = findOrphanedCitations(citations, references);
 
     // Assert
     expect(orphanedCitations.length).toBe(0);
@@ -282,13 +282,13 @@ describe(findOrphanedCitations, () => {
 
   test('when citation is not referenced, should return array with the orphaned citation', () => {
     // Act
-    const paragraphs = [
-      'Supervised algorithms appear to be the preferred method for short text classification (Doe, 2019).'
+    const citations = [
+      '(Doe, 2019)'
     ];
     const references = [
       'Alsmadi, I. and Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.'
     ];
-    const orphanedCitations = findOrphanedCitations(paragraphs, references);
+    const orphanedCitations = findOrphanedCitations(citations, references);
 
     // Assert
     expect(orphanedCitations.length).toBe(1);
