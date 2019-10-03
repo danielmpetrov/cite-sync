@@ -13,6 +13,9 @@ export function parseWordParagraphs(wordParagraphs: ReadonlyArray<Word.Paragraph
     .filter(paragraph => paragraph.length > 0);
 
   const index = all.findIndex(paragraph => /^(bibliography|references)$/gim.test(paragraph));
+  if (index === -1) {
+    return [all, []];
+  }
   const paragraphs = all.slice(0, index);
   const references = all.slice(index + 1)
 
