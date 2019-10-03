@@ -26,17 +26,25 @@ export function parseWordParagraphs(wordParagraphs: ReadonlyArray<Word.Paragraph
 const clean = (citation: string) => citation.replace(/\(|\)|,|[A-Z]\. /g, '');
 
 export function findOrphanedReferences(paragraphs: ReadonlyArray<string>, references: ReadonlyArray<string>): ReadonlyArray<string> {
-  const cleanCitations = paragraphs.reduce((result, paragraph) => {
-    const citations = findCitations(paragraph);
-    const cleanCitations = citations.map(clean);
-    return result.concat(cleanCitations);
-  }, [] as ReadonlyArray<string>)
-
+  const citations = paragraphs.reduce((result, paragraph) => result.concat(findCitations(paragraph)), [] as ReadonlyArray<string>);
+  const cleanCitations = citations.map(clean);
   const cleanReferences = references.reduce((result, reference) => result.concat(clean(reference)), [] as ReadonlyArray<string>);
 
   const isCited = (reference: string) => cleanCitations.some(citation => reference.indexOf(citation) !== -1);
 
   return cleanReferences.reduce(
     (orphaned, cleanReference, index) => isCited(cleanReference) ? orphaned : orphaned.concat(references[index]),
+    [] as ReadonlyArray<string>);
+}
+
+export function findOrphanedCitations(paragraphs: ReadonlyArray<string>, references: ReadonlyArray<string>): ReadonlyArray<string> {
+  const citations = paragraphs.reduce((result, paragraph) => result.concat(findCitations(paragraph)), [] as ReadonlyArray<string>);
+  const cleanCitations = citations.map(clean);
+  const cleanReferences = references.reduce((result, reference) => result.concat(clean(reference)), [] as ReadonlyArray<string>);
+
+  const isReferenced = (citation: string) => cleanReferences.some(reference => reference.indexOf(citation) !== -1);
+
+  return cleanCitations.reduce(
+    (orphaned, cleanCitation, index) => isReferenced(cleanCitation) ? orphaned : orphaned.concat(citations[index]),
     [] as ReadonlyArray<string>);
 }

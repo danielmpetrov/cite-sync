@@ -1,4 +1,4 @@
-import { findCitations, findUnique, htmlMessage, parseWordParagraphs, findOrphanedReferences } from './functions';
+import { findCitations, findUnique, htmlMessage, parseWordParagraphs, findOrphanedReferences, findOrphanedCitations } from './functions';
 
 // https://guides.libraries.psu.edu/apaquickguide/intext
 describe(findCitations, () => {
@@ -261,7 +261,7 @@ describe(parseWordParagraphs, () => {
 });
 
 describe(findOrphanedReferences, () => {
-  test('when citation is referenced, should return empty array', () => {
+  test('when reference is cited, should return empty array', () => {
     // Act
     const paragraphs = [
       'Supervised algorithms appear to be the preferred method for short text classification (Alsmadi and Gan, 2019).'
@@ -275,7 +275,7 @@ describe(findOrphanedReferences, () => {
     expect(orphanedReferences.length).toBe(0);
   });
 
-  test('when citation is not referenced, should return array with the orphaned reference', () => {
+  test('when reference is not cited, should return array with the orphaned reference', () => {
     // Act
     const paragraphs = [
       'Supervised algorithms appear to be the preferred method for short text classification (Doe, 2019).'
@@ -288,5 +288,36 @@ describe(findOrphanedReferences, () => {
     // Assert
     expect(orphanedReferences.length).toBe(1);
     expect(orphanedReferences[0]).toBe('Alsmadi, I. and Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.');
+  });
+});
+
+describe(findOrphanedCitations, () => {
+  test('when citation is referenced, should return empty array', () => {
+    // Act
+    const paragraphs = [
+      'Supervised algorithms appear to be the preferred method for short text classification (Alsmadi and Gan, 2019).'
+    ];
+    const references = [
+      'Alsmadi, I. and Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.'
+    ];
+    const orphanedCitations = findOrphanedCitations(paragraphs, references);
+
+    // Assert
+    expect(orphanedCitations.length).toBe(0);
+  });
+
+  test('when citation is not referenced, should return array with the orphaned citation', () => {
+    // Act
+    const paragraphs = [
+      'Supervised algorithms appear to be the preferred method for short text classification (Doe, 2019).'
+    ];
+    const references = [
+      'Alsmadi, I. and Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.'
+    ];
+    const orphanedCitations = findOrphanedCitations(paragraphs, references);
+
+    // Assert
+    expect(orphanedCitations.length).toBe(1);
+    expect(orphanedCitations[0]).toBe('(Doe, 2019)');
   });
 });
