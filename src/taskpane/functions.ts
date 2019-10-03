@@ -7,10 +7,6 @@ export function findUnique(citations: ReadonlyArray<string>): ReadonlySet<string
   return new Set(filtered);
 }
 
-export function htmlMessage(total: number, unique: number): string {
-  return `Found <strong>${total}</strong> total (<strong>${unique}</strong> unique) in-text citation${total === 1 ? '' : 's'}.`;
-}
-
 export function parseWordParagraphs(wordParagraphs: ReadonlyArray<Word.Paragraph>): [ReadonlyArray<string>, ReadonlyArray<string>] {
   const all: ReadonlyArray<string> = (wordParagraphs || [])
     .map(wordParagraph => wordParagraph.text.trim())
@@ -25,8 +21,11 @@ export function parseWordParagraphs(wordParagraphs: ReadonlyArray<Word.Paragraph
 
 const clean = (citation: string) => citation.replace(/\(|\)|,|[A-Z]\. /g, '');
 
-export function findOrphanedReferences(paragraphs: ReadonlyArray<string>, references: ReadonlyArray<string>): ReadonlyArray<string> {
-  const citations = paragraphs.reduce((result, paragraph) => result.concat(findCitations(paragraph)), [] as ReadonlyArray<string>);
+export function extractCitations(paragraphs: ReadonlyArray<string>): ReadonlyArray<string> {
+  return paragraphs.reduce((result, paragraph) => result.concat(findCitations(paragraph)), [] as ReadonlyArray<string>);
+}
+
+export function findOrphanedReferences(citations: ReadonlyArray<string>, references: ReadonlyArray<string>): ReadonlyArray<string> {
   const cleanCitations = citations.map(clean);
   const cleanReferences = references.reduce((result, reference) => result.concat(clean(reference)), [] as ReadonlyArray<string>);
 
@@ -37,8 +36,7 @@ export function findOrphanedReferences(paragraphs: ReadonlyArray<string>, refere
     [] as ReadonlyArray<string>);
 }
 
-export function findOrphanedCitations(paragraphs: ReadonlyArray<string>, references: ReadonlyArray<string>): ReadonlyArray<string> {
-  const citations = paragraphs.reduce((result, paragraph) => result.concat(findCitations(paragraph)), [] as ReadonlyArray<string>);
+export function findOrphanedCitations(citations: ReadonlyArray<string>, references: ReadonlyArray<string>): ReadonlyArray<string> {
   const cleanCitations = citations.map(clean);
   const cleanReferences = references.reduce((result, reference) => result.concat(clean(reference)), [] as ReadonlyArray<string>);
 

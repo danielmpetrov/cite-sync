@@ -1,34 +1,16 @@
-import { findCitations, findUnique, htmlMessage, parseWordParagraphs, findOrphanedReferences, findOrphanedCitations } from './functions';
+import { findUnique, parseWordParagraphs, findOrphanedReferences, findOrphanedCitations, extractCitations } from './functions';
 
-let summary: HTMLElement;
-let extraInfo: HTMLElement;
+let output: HTMLElement;
 
 Office.onReady(info => {
   if (info.host === Office.HostType.Word) {
     document.getElementById('sideload-msg').style.display = 'none';
     document.getElementById('app-body').style.display = 'flex';
-    document.getElementById('btn-count').onclick = count;
     document.getElementById('btn-analyze').onclick = analyze;
-    summary = document.getElementById('summary');
-    extraInfo = document.getElementById('extra-info');
-    extraInfo.onclick = lookup;
+    output = document.getElementById('output');
+    output.onclick = selectCitation;
   }
 });
-
-async function count() {
-  return Word.run(async context => {
-    context.document.body.load('text');
-    await context.sync();
-
-    const citations = findCitations(context.document.body.text);
-    const unique = findUnique(citations);
-    const message = htmlMessage(citations.length, unique.size);
-    summary.innerHTML = message;
-    extraInfo.innerHTML = '';
-
-    await context.sync();
-  }).catch(console.log);
-}
 
 async function analyze() {
   return Word.run(async context => {
@@ -36,30 +18,37 @@ async function analyze() {
     await context.sync();
 
     const [paragraphs, references] = parseWordParagraphs(wordParagraphs.items);
+    const citations = extractCitations(paragraphs);
+    const unique = findUnique(citations);
+    const orphanedReferences = findOrphanedReferences(citations, references);
+    const orphanedCitations = findOrphanedCitations(citations, references);
 
-    const orphanedReferences = findOrphanedReferences(paragraphs, references);
-    const orphanedCitations = findOrphanedCitations(paragraphs, references);
+    output.innerHTML = `
+      <p style="text-align: center; margin-bottom: 0;">
+        Your text contains <strong>${citations.length}</strong> total (<strong>${unique.size}</strong> unique) in-text citation(s) and <strong>${references.length}</strong> reference(s).
+      </p>
+      <p style="text-align: center; margin-bottom: 0;">
+        Found <strong>${orphanedReferences.length}</strong> reference(s) that were never cited in-text.
+      </p>`;
 
-    summary.innerHTML = `Found <strong>${orphanedReferences.length}</strong> reference(s) that were never cited in-text.`;
-    extraInfo.innerHTML = '';
     for (const reference of orphanedReferences) {
-      extraInfo.innerHTML += `<p>${reference}</p>`
+      output.innerHTML += `<p>${reference}</p>`
     }
-    extraInfo.innerHTML += `<p style="text-align: center; margin-bottom: 0;">
-      Found <strong>${orphanedCitations.length}</strong> (<strong>${findUnique(orphanedCitations).size}</strong> unique) citation(s) that were not referenced.
-    </p>`;
+    output.innerHTML += `
+      <p style="text-align: center; margin-bottom: 0;">
+        Found <strong>${orphanedCitations.length}</strong> total (<strong>${findUnique(orphanedCitations).size}</strong> unique) in-text citation(s) that were not referenced.
+      </p>`;
 
     for (const citation of orphanedCitations) {
-      extraInfo.innerHTML += `
+      output.innerHTML += `
         <div role="button" class="ms-welcome__action ms-Button ms-Button--hero ms-font-sm">
           <span class="ms-Button-label citation-link">${citation}</span>
-        </div>
-      `;
+        </div>`;
     }
-  });
+  }).catch(console.log);
 }
 
-async function lookup(event: any) {
+async function selectCitation(event: any) {
   if (!event.target.classList.contains('citation-link')) {
     return;
   }
