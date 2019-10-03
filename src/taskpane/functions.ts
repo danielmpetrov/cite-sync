@@ -22,11 +22,11 @@ export function parseWordParagraphs(wordParagraphs: ReadonlyArray<Word.Paragraph
   return [paragraphs, references];
 }
 
-const clean = (citation: string) => citation.replace(/\(|\)|,|[A-Z]\. /g, '');
-
 export function extractCitations(paragraphs: ReadonlyArray<string>): ReadonlyArray<string> {
   return paragraphs.reduce((result, paragraph) => result.concat(findCitations(paragraph)), [] as ReadonlyArray<string>);
 }
+
+const clean = (citation: string) => citation.replace(/\(|\)|,|[A-Z]\. /g, '');
 
 export function findOrphanedReferences(citations: ReadonlyArray<string>, references: ReadonlyArray<string>): ReadonlyArray<string> {
   const cleanCitations = citations.map(clean);

@@ -26,25 +26,22 @@ async function analyze() {
     output.innerHTML = `
       <p style="text-align: center; margin-bottom: 0;">
         Your text contains <strong>${citations.length}</strong> total (<strong>${unique.size}</strong> unique) in-text citation(s) and <strong>${references.length}</strong> reference(s).
-      </p>
+      </p>`;
+
+    output.innerHTML += `
       <p style="text-align: center; margin-bottom: 0;">
         Found <strong>${orphanedReferences.length}</strong> reference(s) that were never cited in-text.
       </p>`;
+    orphanedReferences.forEach(reference => output.innerHTML += `<p>${reference}</p>`);
 
-    for (const reference of orphanedReferences) {
-      output.innerHTML += `<p>${reference}</p>`
-    }
     output.innerHTML += `
       <p style="text-align: center; margin-bottom: 0;">
         Found <strong>${orphanedCitations.length}</strong> total (<strong>${findUnique(orphanedCitations).size}</strong> unique) in-text citation(s) that were not referenced.
       </p>`;
-
-    for (const citation of orphanedCitations) {
-      output.innerHTML += `
-        <div role="button" class="ms-welcome__action ms-Button ms-Button--hero ms-font-sm">
-          <span class="ms-Button-label citation-link">${citation}</span>
-        </div>`;
-    }
+    orphanedCitations.forEach(citation => output.innerHTML += `
+      <div role="button" class="ms-welcome__action ms-Button ms-Button--hero ms-font-sm">
+        <span class="ms-Button-label citation-link">${citation}</span>
+      </div>`);
   }).catch(console.log);
 }
 
