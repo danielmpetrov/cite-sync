@@ -7,10 +7,10 @@
   <DisplayName DefaultValue="Cite Sync"/>
   <Description DefaultValue="This word add-in helps you keep track of in-text citation and bibliography, and alert you if they mismatch."/>
   <IconUrl DefaultValue="https://localhost:3000/assets/icon-32.png"/>
-  <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/icon-80.png"/>
-  <SupportUrl DefaultValue="https://www.contoso.com/help"/>
+  <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/icon-512.png"/>
+  <SupportUrl DefaultValue="https://www.danielmpetrov.com/cite-sync"/>
   <AppDomains>
-    <AppDomain>contoso.com</AppDomain>
+    <AppDomain>danielmpetrov.com</AppDomain>
   </AppDomains>
   <Hosts>
     <Host Name="Document"/>

@@ -11,13 +11,14 @@ ul {
     padding: 0;
 }
 
-.ms-welcome__header {
-    padding: 80px 20px 20px 20px;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: column;
-    flex-direction: column;
-    align-items: center;
+header {
+    padding-top: 36px;
+    text-align: center;
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
 }
 
 .ms-welcome__main {
