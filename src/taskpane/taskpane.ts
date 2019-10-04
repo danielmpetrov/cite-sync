@@ -22,11 +22,14 @@ async function analyze() {
 
     if (citations.length === 0 && references.length === 0) {
       output.innerHTML = `
-        <p style="text-align: center; margin-bottom: 0;">
-          Your text contains <strong>no</strong> citations and <strong>no</strong> references.
+        <p style="text-align: center; margin-bottom: 0;font-size: 18px;">
+          Congratulations!
         </p>
         <p style="text-align: center; margin-bottom: 0;">
-          Write your document and press <b>Run Analysis</b> again.
+          We found no mismatches between your citations and references.
+        </p>
+        <p style="text-align: center; margin-bottom: 0;">
+          <img style="max-width: 200px;" src="../../assets/prize.png" alt="Certificate" title="Certificate" />
         </p>`;
       return;
     }
@@ -46,13 +49,17 @@ async function analyze() {
 }
 
 function renderOrphanedReferences(output: HTMLElement, references: ReadonlyArray<string>) {
+  if (references.length === 0) {
+    return;
+  }
+
   output.innerHTML += `
     <p style="text-align: center; margin-bottom: 0;">
       Found <strong>${references.length}</strong> reference(s) that were never cited.
     </p>`;
 
   if (references.length > 20) {
-    output.innerHTML += `<p>To keep things running <em>smoothly</em>, displaying the first 20 results only.</p>`;
+    output.innerHTML += `<p style="color: #888;">To keep things running smoothly, displaying the first 20 results only.</p>`;
     for (let i = 0; i < 20; i++) {
       output.innerHTML += `<p>${references[i]}</p>`;
     }
@@ -62,13 +69,17 @@ function renderOrphanedReferences(output: HTMLElement, references: ReadonlyArray
 }
 
 function renderOrphanedCitations(output: HTMLElement, citations: ReadonlyArray<string>) {
+  if (citations.length === 0) {
+    return;
+  }
+
   output.innerHTML += `
     <p style="text-align: center; margin-bottom: 0;">
       Found <strong>${citations.length}</strong> total (<strong>${findUnique(citations).size}</strong> unique) citation(s) that were not referenced.
     </p>`;
 
   if (citations.length > 20) {
-    output.innerHTML += `<p>To keep things running <em>smoothly</em>, displaying the first 20 results only.</p>`;
+    output.innerHTML += `<p style="color: #888;">To keep things running smoothly, displaying the first 20 results only.</p>`;
     for (let i = 0; i < 20; i++) {
       output.innerHTML += `
         <div role="button" class="ms-welcome__action ms-Button ms-Button--hero ms-font-sm">
