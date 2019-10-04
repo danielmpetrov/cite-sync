@@ -26,7 +26,7 @@ async function analyze() {
           Congratulations!
         </p>
         <p style="text-align: center; margin-bottom: 0;">
-          We found no mismatches between your citations and references.
+          Everything looks nice and synchronized.
         </p>
         <p style="text-align: center; margin-bottom: 0;">
           <img style="max-width: 200px;" src="../../assets/prize.png" alt="Certificate" title="Certificate" />
