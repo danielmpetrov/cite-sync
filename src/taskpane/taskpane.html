@@ -11,7 +11,8 @@
     <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
 
     <!-- For more information on Office UI Fabric, visit https://developer.microsoft.com/fabric. -->
-    <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.min.css"/>
+    <link rel="stylesheet"
+        href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.min.css" />
 
     <!-- Template styles -->
     <link href="taskpane.css" rel="stylesheet" type="text/css" />
@@ -20,17 +21,17 @@
 <body class="ms-font-m ms-welcome ms-Fabric">
     <header class="ms-welcome__header ms-bgColor-neutralLighter">
         <img width="90" height="90" src="../../assets/logo-filled.png" alt="Contoso" title="Contoso" />
-        <h1 class="ms-font-su">Welcome</h1>
+        <h1 class="ms-font-xxl">Welcome</h1>
     </header>
     <section id="sideload-msg" class="ms-welcome__main">
         <h2 class="ms-font-xl">Please sideload your add-in to see app body.</h2>
     </section>
     <main id="app-body" class="ms-welcome__main" style="display: none;">
-        <h2 class="ms-font-xl">Discover what Cite Sync can do for you!</h2>
+        <h2 class="ms-font-xl">Discover what Cite Sync can do!</h2>
         <ul class="ms-List ms-welcome__features">
             <li class="ms-ListItem">
                 <i class="ms-Icon ms-Icon--DocumentManagement ms-font-xl"></i>
-                <span class="ms-font-m">Automatically citation check</span>
+                <span class="ms-font-m">Automatic citation check</span>
             </li>
             <li class="ms-ListItem">
                 <i class="ms-Icon ms-Icon--Education ms-font-xl"></i>
@@ -47,7 +48,11 @@
                 <div id="text"><span class="spot"></span>Run Analysis</div>
             </svg>
         </div>
-        <div id="output"></div>
+        <div id="output">
+            <p style="text-align: center; margin-bottom: 0;">
+                Write your document and press <b>Run Analysis</b>.
+            </p>
+        </div>
     </main>
 </body>
 

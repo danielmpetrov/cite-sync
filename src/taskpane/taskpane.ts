@@ -19,6 +19,18 @@ async function analyze() {
 
     const [paragraphs, references] = parseWordParagraphs(wordParagraphs.items);
     const citations = extractCitations(paragraphs);
+
+    if (citations.length === 0 && references.length === 0) {
+      output.innerHTML = `
+        <p style="text-align: center; margin-bottom: 0;">
+          Your text contains <strong>no</strong> in-text citations and <strong>no</strong> references.
+        </p>
+        <p style="text-align: center; margin-bottom: 0;">
+          Write your document and press <b>Run Analysis</b> again.
+        </p>`;
+      return;
+    }
+
     const unique = findUnique(citations);
     const orphanedReferences = findOrphanedReferences(citations, references);
     const orphanedCitations = findOrphanedCitations(citations, references);
