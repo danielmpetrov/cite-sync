@@ -23,7 +23,7 @@ async function analyze() {
     if (citations.length === 0 && references.length === 0) {
       output.innerHTML = `
         <p style="text-align: center; margin-bottom: 0;">
-          Your text contains <strong>no</strong> in-text citations and <strong>no</strong> references.
+          Your text contains <strong>no</strong> citations and <strong>no</strong> references.
         </p>
         <p style="text-align: center; margin-bottom: 0;">
           Write your document and press <b>Run Analysis</b> again.
@@ -37,18 +37,18 @@ async function analyze() {
 
     output.innerHTML = `
       <p style="text-align: center; margin-bottom: 0;">
-        Your text contains <strong>${citations.length}</strong> total (<strong>${unique.size}</strong> unique) in-text citation(s) and <strong>${references.length}</strong> reference(s).
+        Your text contains <strong>${citations.length}</strong> total (<strong>${unique.size}</strong> unique) citation(s) and <strong>${references.length}</strong> reference(s).
       </p>`;
 
     output.innerHTML += `
       <p style="text-align: center; margin-bottom: 0;">
-        Found <strong>${orphanedReferences.length}</strong> reference(s) that were never cited in-text.
+        Found <strong>${orphanedReferences.length}</strong> reference(s) that were never cited.
       </p>`;
     orphanedReferences.forEach(reference => output.innerHTML += `<p>${reference}</p>`);
 
     output.innerHTML += `
       <p style="text-align: center; margin-bottom: 0;">
-        Found <strong>${orphanedCitations.length}</strong> total (<strong>${findUnique(orphanedCitations).size}</strong> unique) in-text citation(s) that were not referenced.
+        Found <strong>${orphanedCitations.length}</strong> total (<strong>${findUnique(orphanedCitations).size}</strong> unique) citation(s) that were not referenced.
       </p>`;
     orphanedCitations.forEach(citation => output.innerHTML += `
       <div role="button" class="ms-welcome__action ms-Button ms-Button--hero ms-font-sm">
