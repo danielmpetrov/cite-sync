@@ -1,4 +1,4 @@
-import { findUnique, parseWordParagraphs, findOrphanedReferences, findOrphanedCitations, extractCitations } from './functions';
+import { parseWordParagraphs, findOrphanedReferences, findOrphanedCitations, extractCitations } from './functions';
 
 let output: HTMLElement;
 
@@ -11,6 +11,9 @@ Office.onReady(info => {
     output.onclick = selectCitation;
   }
 });
+
+const citationsHtml = (count: number): string => `<strong>${count}</strong> citation${count === 1 ? '' : 's'}`;
+const referencesHtml = (count: number): string => `<strong>${count}</strong> reference${count === 1 ? '' : 's'}`;
 
 async function analyze() {
   return Word.run(async context => {
@@ -34,13 +37,15 @@ async function analyze() {
       return;
     }
 
-    const unique = findUnique(citations);
     const orphanedReferences = findOrphanedReferences(citations, references);
     const orphanedCitations = findOrphanedCitations(citations, references);
 
     output.innerHTML = `
-      <p style="text-align: center; margin-bottom: 0;">
-        Your text contains <strong>${citations.length}</strong> total (<strong>${unique.size}</strong> unique) citation(s) and <strong>${references.length}</strong> reference(s).
+      <p class="message message--success">
+        <img class="message__icon" src="../../assets/info.svg" />
+        <span class="message__text">
+          Your text contains ${citationsHtml(citations.length)} and ${referencesHtml(references.length)}.
+        </span>
       </p>`;
 
     renderOrphanedReferences(output, orphanedReferences);
@@ -54,8 +59,11 @@ function renderOrphanedReferences(output: HTMLElement, references: ReadonlyArray
   }
 
   output.innerHTML += `
-    <p style="text-align: center; margin-bottom: 0;">
-      Found <strong>${references.length}</strong> reference(s) that were never cited.
+    <p class="message message--warning">
+      <img class="message__icon" src="../../assets/alert-circle.svg" />
+      <span class="message__text">
+        Found ${referencesHtml(references.length)} that are not cited.
+      </span>
     </p>`;
 
   if (references.length > 20) {
@@ -74,8 +82,11 @@ function renderOrphanedCitations(output: HTMLElement, citations: ReadonlyArray<s
   }
 
   output.innerHTML += `
-    <p style="text-align: center; margin-bottom: 0;">
-      Found <strong>${citations.length}</strong> total (<strong>${findUnique(citations).size}</strong> unique) citation(s) that were not referenced.
+    <p class="message message--warning">
+      <img class="message__icon" src="../../assets/alert-circle.svg" />
+      <span class="message__text">
+        Found ${citationsHtml(citations.length)} that are not referenced.
+      </span>
     </p>`;
 
   if (citations.length > 20) {

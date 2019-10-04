@@ -92,6 +92,28 @@ footer a:focus {
     color: #005a9e;
 }
 
+.message {
+    border-radius: 5px;
+    color: #444;
+    font-size: 16px;
+    margin-bottom: 0;
+    padding: 24px;
+    text-align: center;
+}
+
+.message__icon,
+.message__text {
+    vertical-align: middle;
+}
+
+.message--warning {
+    background: #fff1f1;
+}
+
+.message--success {
+    background: #ebf9ea;
+}
+
 /*
     Credit: https://codepen.io/Gingernaut/pen/qOgMLy
 */
