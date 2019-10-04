@@ -122,8 +122,8 @@ describe(findCitations, () => {
 
     // Assert
     expect(citations.length).toBe(2);
-    expect(citations[0]).toBe('(Derwing, Rossiter and Munro, 2002)');
-    expect(citations[1]).toBe('(Thomas, 2004)');
+    expect(citations[0]).toBe('Derwing, Rossiter and Munro, 2002');
+    expect(citations[1]).toBe('Thomas, 2004');
   });
 
   test('should match passive citation with page number', () => {

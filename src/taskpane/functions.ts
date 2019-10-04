@@ -1,5 +1,12 @@
 export function findCitations(text: string): ReadonlyArray<string> {
-  return (text || '').match(/([A-z]+(, |,? and | et al\.)?){1,3} \((\d{4}|n\.d\.)(, p\. \d+)?\)|\(([A-z ,.&]+, (\d{4}|n\.d\.)(, p\. \d+)?(; )?)+\)/g) || [];
+  const citations = (text || '').match(/([A-z]+(, |,? and | et al\.)?){1,3} \((\d{4}|n\.d\.)(, p\. \d+)?\)|\(([A-z ,.&]+, (\d{4}|n\.d\.)(, p\. \d+)?(; )?)+\)/g) || [];
+  return citations.reduce((result, citation) => {
+    const citationsSplit = citation.split(';');
+    if (citationsSplit.length > 1) {
+      return result.concat(...citationsSplit.map(c => c.trim().replace(/\(|\)/g, '')));
+    }
+    return result.concat(citation);
+  }, [] as ReadonlyArray<string>);
 }
 
 export function findUnique(citations: ReadonlyArray<string>): ReadonlySet<string> {
