@@ -40,21 +40,47 @@ async function analyze() {
         Your text contains <strong>${citations.length}</strong> total (<strong>${unique.size}</strong> unique) citation(s) and <strong>${references.length}</strong> reference(s).
       </p>`;
 
-    output.innerHTML += `
-      <p style="text-align: center; margin-bottom: 0;">
-        Found <strong>${orphanedReferences.length}</strong> reference(s) that were never cited.
-      </p>`;
-    orphanedReferences.forEach(reference => output.innerHTML += `<p>${reference}</p>`);
+    renderOrphanedReferences(output, orphanedReferences);
+    renderOrphanedCitations(output, orphanedCitations);
+  }).catch(console.log);
+}
 
-    output.innerHTML += `
-      <p style="text-align: center; margin-bottom: 0;">
-        Found <strong>${orphanedCitations.length}</strong> total (<strong>${findUnique(orphanedCitations).size}</strong> unique) citation(s) that were not referenced.
-      </p>`;
-    orphanedCitations.forEach(citation => output.innerHTML += `
+function renderOrphanedReferences(output: HTMLElement, references: ReadonlyArray<string>) {
+  output.innerHTML += `
+    <p style="text-align: center; margin-bottom: 0;">
+      Found <strong>${references.length}</strong> reference(s) that were never cited.
+    </p>`;
+
+  if (references.length > 20) {
+    output.innerHTML += `<p>To keep things running <em>smoothly</em>, displaying the first 20 results only.</p>`;
+    for (let i = 0; i < 20; i++) {
+      output.innerHTML += `<p>${references[i]}</p>`;
+    }
+  } else {
+    references.forEach(reference => output.innerHTML += `<p>${reference}</p>`);
+  }
+}
+
+function renderOrphanedCitations(output: HTMLElement, citations: ReadonlyArray<string>) {
+  output.innerHTML += `
+    <p style="text-align: center; margin-bottom: 0;">
+      Found <strong>${citations.length}</strong> total (<strong>${findUnique(citations).size}</strong> unique) citation(s) that were not referenced.
+    </p>`;
+
+  if (citations.length > 20) {
+    output.innerHTML += `<p>To keep things running <em>smoothly</em>, displaying the first 20 results only.</p>`;
+    for (let i = 0; i < 20; i++) {
+      output.innerHTML += `
+        <div role="button" class="ms-welcome__action ms-Button ms-Button--hero ms-font-sm">
+          <span class="ms-Button-label citation-link">${citations[i]}</span>
+        </div>`;
+    }
+  } else {
+    citations.forEach(citation => output.innerHTML += `
       <div role="button" class="ms-welcome__action ms-Button ms-Button--hero ms-font-sm">
         <span class="ms-Button-label citation-link">${citation}</span>
       </div>`);
-  }).catch(console.log);
+  }
 }
 
 async function selectCitation(event: any) {
