@@ -33,7 +33,7 @@ export function extractCitations(paragraphs: ReadonlyArray<string>): ReadonlyArr
   return paragraphs.reduce((result, paragraph) => result.concat(findCitations(paragraph)), [] as ReadonlyArray<string>);
 }
 
-const clean = (citation: string) => citation.replace(/\(|\)|,|[A-Z]\. /g, '');
+const clean = (citation: string) => citation.replace(/\(|\)|,|[A-Z]\./g, '').replace(/ {2,}/g, ' ');
 
 export function findOrphanedReferences(citations: ReadonlyArray<string>, references: ReadonlyArray<string>): ReadonlyArray<string> {
   const cleanCitations = citations.map(clean);
