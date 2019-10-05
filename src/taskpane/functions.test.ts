@@ -280,6 +280,20 @@ describe(findOrphanedCitations, () => {
     expect(orphanedCitations.length).toBe(0);
   });
 
+  test('when citation is referenced and reference contains double space, should return empty array', () => {
+    // Act
+    const citations = [
+      '(Alsmadi and Gan, 2019)'
+    ];
+    const references = [
+      'Alsmadi, I. and  Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.'
+    ];
+    const orphanedCitations = findOrphanedCitations(citations, references);
+
+    // Assert
+    expect(orphanedCitations.length).toBe(0);
+  });
+
   test('when citation is not referenced, should return array with the orphaned citation', () => {
     // Act
     const citations = [
@@ -293,5 +307,33 @@ describe(findOrphanedCitations, () => {
     // Assert
     expect(orphanedCitations.length).toBe(1);
     expect(orphanedCitations[0]).toBe('(Doe, 2019)');
+  });
+
+  test('when citation is referenced with double initials, should return empty array', () => {
+    // Act
+    const citations = [
+      'Jones (1991)'
+    ];
+    const references = [
+      'Jones, T.M. 1991, "Ethical decision making by individual in organisations: an issue-contingent model", Academy of Management Review, vol. 16, no. 2, pp. 366-395.'
+    ];
+    const orphanedCitations = findOrphanedCitations(citations, references);
+
+    // Assert
+    expect(orphanedCitations.length).toBe(0);
+  });
+
+  test('when citation containing et al. is referenced, should return empty array', () => {
+    // Act
+    const citations = [
+      'Kelley et al. (1992)'
+    ];
+    const references = [
+      'Kelley, T., Margheim, L. and Pattison, D. 1992, “Survey on the differential effects of time deadline pressure versus time budget pressure on auditor behaviour”, The Journal of Applied Business Research, vol. 15, no. 4, pp. 117-128.'
+    ];
+    const orphanedCitations = findOrphanedCitations(citations, references);
+
+    // Assert
+    expect(orphanedCitations.length).toBe(0);
   });
 });
