@@ -106,8 +106,16 @@ footer a:focus {
     vertical-align: middle;
 }
 
-.message--warning {
+.message--error {
     background: #fff1f1;
+}
+
+.message--warning {
+    background: #fefaeb;
+}
+
+.message--info {
+    background: #edf2fa;
 }
 
 .message--success {

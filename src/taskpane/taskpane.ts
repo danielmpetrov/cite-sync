@@ -14,6 +14,11 @@ Office.onReady(info => {
 
 const citationsHtml = (count: number): string => `<strong>${count}</strong> citation${count === 1 ? '' : 's'}`;
 const referencesHtml = (count: number): string => `<strong>${count}</strong> reference${count === 1 ? '' : 's'}`;
+const top20Warning: string = `
+  <p class="message message--warning">
+    <img class="message__icon" src="../../assets/alert-circle.svg" />
+    <span class="message__text">Displaying top 20 results only.</span>
+  </p>`;
 
 async function analyze() {
   return Word.run(async context => {
@@ -37,19 +42,19 @@ async function analyze() {
       return;
     }
 
-    const orphanedReferences = findOrphanedReferences(citations, references);
-    const orphanedCitations = findOrphanedCitations(citations, references);
-
     output.innerHTML = `
-      <p class="message message--success">
+      <p class="message message--info">
         <img class="message__icon" src="../../assets/info.svg" />
         <span class="message__text">
           Your text contains ${citationsHtml(citations.length)} and ${referencesHtml(references.length)}.
         </span>
       </p>`;
 
-    renderOrphanedReferences(output, orphanedReferences);
+    const orphanedCitations = findOrphanedCitations(citations, references);
+    const orphanedReferences = findOrphanedReferences(citations, references);
+
     renderOrphanedCitations(output, orphanedCitations);
+    renderOrphanedReferences(output, orphanedReferences);
   }).catch(console.log);
 }
 
@@ -59,15 +64,15 @@ function renderOrphanedReferences(output: HTMLElement, references: ReadonlyArray
   }
 
   output.innerHTML += `
-    <p class="message message--warning">
-      <img class="message__icon" src="../../assets/alert-circle.svg" />
+    <p class="message message--error">
+      <img class="message__icon" src="../../assets/x-circle.svg" />
       <span class="message__text">
         Found ${referencesHtml(references.length)} that are not cited.
       </span>
     </p>`;
 
   if (references.length > 20) {
-    output.innerHTML += `<p style="color: #888;">To keep things running smoothly, displaying the first 20 results only.</p>`;
+    output.innerHTML += top20Warning;
     for (let i = 0; i < 20; i++) {
       output.innerHTML += `<p>${references[i]}</p>`;
     }
@@ -82,15 +87,15 @@ function renderOrphanedCitations(output: HTMLElement, citations: ReadonlyArray<s
   }
 
   output.innerHTML += `
-    <p class="message message--warning">
-      <img class="message__icon" src="../../assets/alert-circle.svg" />
+    <p class="message message--error">
+      <img class="message__icon" src="../../assets/x-circle.svg" />
       <span class="message__text">
         Found ${citationsHtml(citations.length)} that are not referenced.
       </span>
     </p>`;
 
   if (citations.length > 20) {
-    output.innerHTML += `<p style="color: #888;">To keep things running smoothly, displaying the first 20 results only.</p>`;
+    output.innerHTML += top20Warning;
     for (let i = 0; i < 20; i++) {
       output.innerHTML += `
         <div role="button" class="ms-welcome__action ms-Button ms-Button--hero ms-font-sm">
