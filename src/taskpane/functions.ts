@@ -33,7 +33,7 @@ export function extractCitations(paragraphs: ReadonlyArray<string>): ReadonlyArr
   return paragraphs.reduce((result, paragraph) => result.concat(findCitations(paragraph)), [] as ReadonlyArray<string>);
 }
 
-const clean = (citation: string) => citation.replace(/\(|\)|,|[A-Z]\./g, '').replace(/ {2,}/g, ' ');
+const clean = (citation: string) => citation.replace(/\(|\)|,|[A-Z]\.|et al\.|and|&/g, '').replace(/ {2,}/g, ' ');
 
 export function findOrphanedReferences(citations: ReadonlyArray<string>, references: ReadonlyArray<string>): ReadonlyArray<string> {
   const cleanCitations = citations.map(clean);
@@ -50,7 +50,10 @@ export function findOrphanedCitations(citations: ReadonlyArray<string>, referenc
   const cleanCitations = citations.map(clean);
   const cleanReferences = references.reduce((result, reference) => result.concat(clean(reference)), [] as ReadonlyArray<string>);
 
-  const isReferenced = (citation: string) => cleanReferences.some(reference => reference.indexOf(citation) !== -1);
+  const isReferenced = (citation: string) => cleanReferences.some(reference => {
+    const citationParts = citation.split(' ');
+    return citationParts.every(part => reference.indexOf(part) !== -1);
+  });
 
   return cleanCitations.reduce(
     (orphaned, cleanCitation, index) => isReferenced(cleanCitation) ? orphaned : orphaned.concat(citations[index]),
