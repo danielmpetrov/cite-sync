@@ -1,4 +1,5 @@
 import { parseWordParagraphs, findOrphanedReferences, findOrphanedCitations, extractCitations } from './functions';
+import { renderCongratulations, renderInfo, renderReferencesError, renderTop20Warning, renderCitationsError, renderCitation } from './render';
 
 let output: HTMLElement;
 
@@ -12,14 +13,6 @@ Office.onReady(info => {
   }
 });
 
-const citationsHtml = (count: number): string => `<strong>${count}</strong> citation${count === 1 ? '' : 's'}`;
-const referencesHtml = (count: number): string => `<strong>${count}</strong> reference${count === 1 ? '' : 's'}`;
-const top20Warning: string = `
-  <p class="message message--warning">
-    <img class="message__icon" src="../../assets/alert-circle.svg" />
-    <span class="message__text">Displaying top 20 results only.</span>
-  </p>`;
-
 async function analyze() {
   return Word.run(async context => {
     const wordParagraphs = context.document.body.paragraphs.load('text');
@@ -29,26 +22,11 @@ async function analyze() {
     const citations = extractCitations(paragraphs);
 
     if (citations.length === 0 && references.length === 0) {
-      output.innerHTML = `
-        <p style="text-align: center; margin-bottom: 0;font-size: 18px;">
-          Congratulations!
-        </p>
-        <p style="text-align: center; margin-bottom: 0;">
-          Everything looks nice and synchronized.
-        </p>
-        <p style="text-align: center; margin-bottom: 0;">
-          <img style="max-width: 200px;" src="../../assets/prize.png" alt="Certificate" title="Certificate" />
-        </p>`;
+      output.innerHTML = renderCongratulations;
       return;
     }
 
-    output.innerHTML = `
-      <p class="message message--info">
-        <img class="message__icon" src="../../assets/info.svg" />
-        <span class="message__text">
-          Your text contains ${citationsHtml(citations.length)} and ${referencesHtml(references.length)}.
-        </span>
-      </p>`;
+    output.innerHTML = renderInfo(citations.length, references.length);
 
     const orphanedCitations = findOrphanedCitations(citations, references);
     const orphanedReferences = findOrphanedReferences(citations, references);
@@ -63,16 +41,10 @@ function renderOrphanedReferences(output: HTMLElement, references: ReadonlyArray
     return;
   }
 
-  output.innerHTML += `
-    <p class="message message--error">
-      <img class="message__icon" src="../../assets/x-circle.svg" />
-      <span class="message__text">
-        Found ${referencesHtml(references.length)} that are not cited.
-      </span>
-    </p>`;
+  output.innerHTML += renderReferencesError(references.length);
 
   if (references.length > 20) {
-    output.innerHTML += top20Warning;
+    output.innerHTML += renderTop20Warning;
     for (let i = 0; i < 20; i++) {
       output.innerHTML += `<p>${references[i]}</p>`;
     }
@@ -86,27 +58,15 @@ function renderOrphanedCitations(output: HTMLElement, citations: ReadonlyArray<s
     return;
   }
 
-  output.innerHTML += `
-    <p class="message message--error">
-      <img class="message__icon" src="../../assets/x-circle.svg" />
-      <span class="message__text">
-        Found ${citationsHtml(citations.length)} that are not referenced.
-      </span>
-    </p>`;
+  output.innerHTML += renderCitationsError(citations.length);
 
   if (citations.length > 20) {
-    output.innerHTML += top20Warning;
+    output.innerHTML += renderTop20Warning;
     for (let i = 0; i < 20; i++) {
-      output.innerHTML += `
-        <div role="button" class="ms-welcome__action ms-Button ms-Button--hero ms-font-sm">
-          <span class="ms-Button-label citation-link">${citations[i]}</span>
-        </div>`;
+      output.innerHTML += renderCitation(citations[i]);
     }
   } else {
-    citations.forEach(citation => output.innerHTML += `
-      <div role="button" class="ms-welcome__action ms-Button ms-Button--hero ms-font-sm">
-        <span class="ms-Button-label citation-link">${citation}</span>
-      </div>`);
+    citations.forEach(citation => output.innerHTML += renderCitation(citation));
   }
 }
 
