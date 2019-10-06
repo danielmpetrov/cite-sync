@@ -53,6 +53,15 @@ describe(findCitations, () => {
     expect(citations[0]).toBe('(Doe and Borg, 2019)');
   });
 
+  test('should match passive double author citation using "&" instead of "and"', () => {
+    // Act
+    const citations = findCitations('Jest is a delightful JavaScript Testing Framework with a focus on simplicity (Doe & Borg, 2019).');
+
+    // Act
+    expect(citations.length).toBe(1);
+    expect(citations[0]).toBe('(Doe & Borg, 2019)');
+  });
+
   test('should match active double author citation', () => {
     // Act
     const citations = findCitations('Doe and Borg (2019) claim that Jest is a delightful JavaScript Testing Framework with a focus on simplicity.');
