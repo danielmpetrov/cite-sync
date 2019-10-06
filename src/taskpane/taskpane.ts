@@ -75,10 +75,10 @@ async function selectCitation(event: any) {
     return;
   }
 
-  const citation = event.target.innerText.trim();
+  const citation: string = event.target.innerText.trim();
 
   return Word.run(async context => {
-    const result = context.document.body.search(citation).load('text');
+    const result = context.document.body.search(citation, { ignoreSpace: true }).load('text');
     await context.sync();
 
     result.items[0].select();

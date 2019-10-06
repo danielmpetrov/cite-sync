@@ -179,6 +179,14 @@ describe(findCitations, () => {
     expect(citations[0]).toBe('(Al Shbail et al., 2018b)');
   });
 
+  test('should match citation with accidental double space and return it without the space', () => {
+    const citations = findCitations('[...] Personal Resilience and Resilient Relationships (PRRR) program (Waite and  Richardson, 2004).');
+
+    // Assert
+    expect(citations.length).toBe(1);
+    expect(citations[0]).toBe('(Waite and Richardson, 2004)');
+  });
+
   test('should match citation using characters from the Latin-1 Supplement block', () => {
     const citations = findCitations('As a result, it is in the organisation’s interest to encourage ethical behaviour whilst discouraging unethical conduct (Treviño et al., 1998). Formal systems include leadership, authority structures, systems for rewards and penalties, and training efforts (Svanberg and Öhman, 2013).');
 
@@ -274,6 +282,20 @@ describe(findOrphanedReferences, () => {
     // Act
     const citations = [
       '(Alsmadi and Gan, 2019)'
+    ];
+    const references = [
+      'Alsmadi, I. and Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.'
+    ];
+    const orphanedReferences = findOrphanedReferences(citations, references);
+
+    // Assert
+    expect(orphanedReferences.length).toBe(0);
+  });
+
+  test('when reference is cited and citation contains double space, should return empty array', () => {
+    // Act
+    const citations = [
+      '(Alsmadi and  Gan, 2019)'
     ];
     const references = [
       'Alsmadi, I. and Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.'
