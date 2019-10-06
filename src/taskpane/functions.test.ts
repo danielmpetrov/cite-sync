@@ -161,6 +161,23 @@ describe(findCitations, () => {
     expect(citations.length).toBe(1);
     expect(citations[0]).toBe('Smith (n.d.)');
   });
+
+  test('should match citation using the "a,b,c" system', () => {
+    const citations = findCitations('Low job satisfaction may increase the likelihood of dysfunctional practices such as premature signing-off (Al Shbail et al., 2018b).');
+
+    // Assert
+    expect(citations.length).toBe(1);
+    expect(citations[0]).toBe('(Al Shbail et al., 2018b)');
+  });
+
+  test('should not match lowercase word as part of the citation', () => {
+    // Act
+    const citations = findCitations('In fact, Johansen and Christoffersen (2017) suggest that performance evaluation...');
+
+    // Assert
+    expect(citations.length).toBe(1);
+    expect(citations[0]).toBe('Johansen and Christoffersen (2017)');
+  });
 });
 
 describe(findUnique, () => {
