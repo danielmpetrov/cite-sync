@@ -1,4 +1,4 @@
-const pattern = /([A-z]+(, |,? and | et al\.)?){1,3} \((\d{4}[a-z]?|n\.d\.)(, p\. \d+)?\)|\((([A-z]+(, |,? and | et al\.)?){1,3}, (\d{4}[a-z]?|n\.d\.)(, p\. \d+)?(; )?)+\)/g;
+const pattern = /([A-Z][a-z]+(, |,? and | et al\.)?){1,3} \((\d{4}[a-z]?|n\.d\.)(, p\. \d+)?\)|\((([A-Z][a-z]+(, |,? and | et al\.)?){1,3}, (\d{4}[a-z]?|n\.d\.)(, p\. \d+)?(; )?)+\)/g;
 export function findCitations(text: string): ReadonlyArray<string> {
   const citations = (text || '').match(pattern) || [];
   return citations.reduce((result, citation) => {
