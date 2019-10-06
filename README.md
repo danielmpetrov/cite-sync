@@ -1,32 +1,32 @@
-# Office-Addin-TaskPane
+# Cite Sync
 
-This repository contains the source code used by the [Yo Office generator](https://github.com/OfficeDev/generator-office) when you create a new Office Add-in that appears in the task pane. You can also use this repository as a sample to base your own project from if you choose not to use the generator. 
+![GitHub](https://img.shields.io/github/license/danielmpetrov/cite-sync)
+![Feedback](https://img.shields.io/badge/Feedback-Welcome-green)
 
-## TypeScript
+> *Copyright 2019 Daniel Petrov*
 
-This template is written using [TypeScript](http://www.typescriptlang.org/). For the JavaScript version of this template, go to [Office-Addin-TaskPane-JS](https://github.com/OfficeDev/Office-Addin-TaskPane-JS).
+## Features
+This Microsoft Word add-in analyses a word document that is using the author-year method of citation in order to find any discrepencies between the in-text citations and references.
+- Automatic detection of missing references.
+- Automatic detection of references that were never cited.
 
-## Debugging
+## Prerequisites
+- Microsoft Word 2016 or newer
 
-This template supports debugging using any of the following techniques:
+## Installation
+- Cite Sync is under development and not yet published in [AppSource](https://appsource.microsoft.com/)
 
-- [Use a browser's developer tools](https://docs.microsoft.com/office/dev/add-ins/testing/debug-add-ins-in-office-online)
-- [Attach a debugger from the task pane](https://docs.microsoft.com/office/dev/add-ins/testing/attach-debugger-from-task-pane)
-- [Use F12 developer tools on Windows 10](https://docs.microsoft.com/office/dev/add-ins/testing/debug-add-ins-using-f12-developer-tools-on-windows-10)
+## Local development
+1. Make sure you have Nodejs installed
+2. Clone this repository locally.
+    ```bash
+    git clone https://github.com/danielmpetrov/cite-sync.git
+    ```
+3. Run the following shell commands
+    ```bash
+    cd cite-sync
+    npm run start
+    ```
+    This will start a local dev-server on port 3000, and open Microsoft Word with Cite Sync preloaded.
 
-## Questions and comments
-
-We'd love to get your feedback about this sample. You can send your feedback to us in the *Issues* section of this repository.
-
-Questions about Microsoft Office 365 development in general should be posted to [Stack Overflow](http://stackoverflow.com/questions/tagged/office-js+API).  If your question is about the Office JavaScript APIs, make sure it's tagged with  [office-js].
-
-## Additional resources
-
-* [Office add-in documentation](https://docs.microsoft.com/office/dev/add-ins/overview/office-add-ins)
-* More Office Add-in samples at [OfficeDev on Github](https://github.com/officedev)
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information, see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
-
-## Copyright
-
-Copyright (c) 2019 Microsoft Corporation. All rights reserved.
+This project was scaffolded using the [Yeoman generator for Office Add-ins](https://github.com/OfficeDev/generator-office) to generate the [Office-Addin-TaskPane](https://github.com/OfficeDev/Office-Addin-TaskPane) template. Go through their README to learn more.
