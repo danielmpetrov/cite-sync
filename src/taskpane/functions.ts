@@ -40,7 +40,10 @@ export function findOrphanedReferences(citations: ReadonlyArray<string>, referen
   const cleanCitations = citations.map(clean);
   const cleanReferences = references.reduce((result, reference) => result.concat(clean(reference)), [] as ReadonlyArray<string>);
 
-  const isCited = (reference: string) => cleanCitations.some(citation => reference.indexOf(citation) !== -1);
+  const isCited = (reference: string) => cleanCitations.some(citation => {
+    const citationParts = citation.split(' ');
+    return citationParts.every(part => reference.indexOf(part) !== -1);
+  });
 
   return cleanReferences.reduce(
     (orphaned, cleanReference, index) => isCited(cleanReference) ? orphaned : orphaned.concat(references[index]),

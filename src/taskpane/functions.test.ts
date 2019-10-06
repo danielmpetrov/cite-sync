@@ -275,6 +275,20 @@ describe(findOrphanedReferences, () => {
     expect(orphanedReferences.length).toBe(0);
   });
 
+  test('when reference with et al. is cited, should return empty array', () => {
+    // Act
+    const citations = [
+      '(Al Shbail et al., 2018b)'
+    ];
+    const references = [
+      'Al Shbail, M., Salleh, Z. and Mohd Nor, M.N. 2018b, "Antecedents of Burnout and its Relationship to Internal Audit Quality", Business and Economic Horizons, vol. 14, no. 4, pp. 789-817, doi: 10.15208/beh.2018.55.'
+    ];
+    const orphanedReferences = findOrphanedReferences(citations, references);
+
+    // Assert
+    expect(orphanedReferences.length).toBe(0);
+  });
+
   test('when reference is not cited, should return array with the orphaned reference', () => {
     // Act
     const citations = [
