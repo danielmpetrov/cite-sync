@@ -1,5 +1,6 @@
 import { parseWordParagraphs, findOrphanedReferences, findOrphanedCitations, extractCitations } from '../lib/functions';
 import { renderCongratulations, renderInfo, renderReferencesError, renderTop20Warning, renderCitationsError, renderCitation } from './render';
+import debounce = require('lodash.debounce');
 
 let output: HTMLElement;
 
@@ -7,7 +8,10 @@ Office.onReady(info => {
   if (info.host === Office.HostType.Word) {
     document.getElementById('sideload-msg').style.display = 'none';
     document.getElementById('app-body').style.display = 'flex';
-    document.getElementById('btn-analyze').onclick = analyze;
+    document.getElementById('btn-analyze').onclick = debounce(analyze, 500, {
+      leading: true,
+      trailing: false
+    });
     output = document.getElementById('output');
     output.onclick = selectCitation;
   }

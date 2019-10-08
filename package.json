@@ -25,6 +25,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "lodash.debounce": "^4.0.8",
     "ramda": "^0.26.1"
   },
   "devDependencies": {
@@ -32,6 +33,7 @@
     "@babel/polyfill": "^7.6.0",
     "@babel/preset-env": "^7.6.2",
     "@types/jest": "^24.0.18",
+    "@types/lodash.debounce": "^4.0.6",
     "@types/office-js": "^1.0.40",
     "@types/office-runtime": "^1.0.8",
     "@types/ramda": "^0.26.27",
