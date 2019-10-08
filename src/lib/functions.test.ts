@@ -1,4 +1,4 @@
-import { findCitations, findUnique, parseWordParagraphs, findOrphanedReferences, findOrphanedCitations } from './functions';
+import { findCitations, parseWordParagraphs, findOrphanedReferences, findOrphanedCitations } from './functions';
 
 // https://guides.libraries.psu.edu/apaquickguide/intext
 describe(findCitations, () => {
@@ -206,48 +206,6 @@ describe(findCitations, () => {
   });
 });
 
-describe(findUnique, () => {
-  test('when given empty array, should return empty set', () => {
-    // Act
-    const unique = findUnique([]);
-
-    // Assert
-    expect(unique.size).toBe(0);
-  });
-
-  test('when given null, should return empty set', () => {
-    // Act
-    const unique = findUnique(null);
-
-    // Assert
-    expect(unique.size).toBe(0);
-  });
-
-  test('when given undefined, should return empty set', () => {
-    // Act
-    const unique = findUnique(undefined);
-
-    // Assert
-    expect(unique.size).toBe(0);
-  });
-
-  test('when given single reference, should return single element set', () => {
-    // Act
-    const unique = findUnique(['Doe (2019)']);
-
-    // Assert
-    expect(unique.size).toBe(1);
-  });
-
-  test('when given two references to the same source in a different format, should return single element set', () => {
-    // Act
-    const unique = findUnique(['Doe (2019)', '(Doe, 2019)']);
-
-    // Assert
-    expect(unique.size).toBe(1);
-  });
-});
-
 describe(parseWordParagraphs, () => {
   test('when given empty array, should return empty paragraphs and references', () => {
     // Act
@@ -274,6 +232,59 @@ describe(parseWordParagraphs, () => {
     // Assert
     expect(paragraphs.length).toBe(0);
     expect(references.length).toBe(0);
+  });
+
+  test('when given no references title, should return empty references array', () => {
+    // Act
+    const [paragraphs, references] = parseWordParagraphs([
+      { text: 'Once upon a time' },
+      { text: 'There was a paragraph' }
+    ]);
+
+    // Assert
+    expect(paragraphs.length).toBe(2);
+    expect(references.length).toBe(0);
+  });
+
+  test('when given references title, but no references, should return empty references array', () => {
+    // Act
+    const [paragraphs, references] = parseWordParagraphs([
+      { text: 'Once upon a time' },
+      { text: 'There was a paragraph' },
+      { text: 'References' }
+    ]);
+
+    // Assert
+    expect(paragraphs.length).toBe(2);
+    expect(references.length).toBe(0);
+  });
+
+  test('when given references title and references, should return correct paragraphs and references', () => {
+    // Act
+    const [paragraphs, references] = parseWordParagraphs([
+      { text: 'Once upon a time' },
+      { text: 'There was a paragraph' },
+      { text: 'References' },
+      { text: 'Joe Doe, 2019...' }
+    ]);
+
+    // Assert
+    expect(paragraphs.length).toBe(2);
+    expect(references.length).toBe(1);
+  });
+
+  test('when given only references, should return empty paragraphs', () => {
+    // Act
+    const [paragraphs, references] = parseWordParagraphs([
+      { text: 'References' },
+      { text: 'Once upon a time' },
+      { text: 'There was a paragraph' },
+      { text: 'Joe Doe, 2019...' }
+    ]);
+
+    // Assert
+    expect(paragraphs.length).toBe(0);
+    expect(references.length).toBe(3);
   });
 });
 

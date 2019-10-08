@@ -1,4 +1,4 @@
-import { parseWordParagraphs, findOrphanedReferences, findOrphanedCitations, extractCitations } from './functions';
+import { parseWordParagraphs, findOrphanedReferences, findOrphanedCitations, extractCitations } from '../lib/functions';
 import { renderCongratulations, renderInfo, renderReferencesError, renderTop20Warning, renderCitationsError, renderCitation } from './render';
 
 let output: HTMLElement;
