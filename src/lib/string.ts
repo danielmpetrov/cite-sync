@@ -1,4 +1,6 @@
-import { defaultTo, replace, split, match, pipe, test, __, length, mathMod, equals } from 'ramda';
+import {
+    defaultTo, replace, split, match, pipe, test, __, length, mathMod, equals, identity, ifElse
+} from 'ramda';
 
 // Patterns
 const parentheses = /[()]/g;
@@ -12,7 +14,8 @@ export const removeCitationElements = replace(citationElements, '');
 export const removeDoubleSpaces = replace(twoOrMoreSpaces, ' ');
 const removeParentheses = replace(parentheses, '');
 const hasOddNumberOfParentheses = pipe(match(parentheses), length, mathMod(__, 2), equals(1));
-export const removeParenthesesIfOdd = (text: string) => hasOddNumberOfParentheses(text) ? removeParentheses(text) : text;
+export const removeParenthesesIfOdd: (text: string) => string
+    = ifElse(hasOddNumberOfParentheses, removeParentheses, identity);
 export const clean: (citation: string) => string = pipe(removeCitationElements, removeDoubleSpaces);
 
 // Matchers
