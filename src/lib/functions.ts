@@ -1,21 +1,13 @@
-import { defaultTo, map, prop, filter, reduce, pipe, any, concat, trim, test, all, curry, flatten } from 'ramda';
-import { defaultToEmptyString, removeDoubleSpaces, matchCitations, splitBySemicolon, removeParentheses, clean, splitBySpace, isReferencesTitle } from './string'
-
-const processMultiCitation = pipe(
-  splitBySemicolon,
-  map(trim),
-  map(removeParentheses)
-);
-const processMultipleCitations = reduce((result: ReadonlyArray<string>, citation: string) => {
-  const citations = processMultiCitation(citation);
-  return concat(result, citations.length > 1 ? citations : [citation]);
-}, []);
+import { defaultTo, map, prop, filter, pipe, any, trim, all, curry, flatten } from 'ramda';
+import { defaultToEmptyString, removeDoubleSpaces, matchCitations, splitBySemicolon, clean, splitBySpace, isReferencesTitle, removeParenthesesIfOdd } from './string'
 
 export const findCitations: (text: string) => ReadonlyArray<string> = pipe(
   defaultToEmptyString,
   removeDoubleSpaces,
   matchCitations,
-  processMultipleCitations
+  map(splitBySemicolon),
+  flatten,
+  map(pipe(trim, removeParenthesesIfOdd))
 );
 
 export function parseWordParagraphs(wordParagraphs: ReadonlyArray<{ text: string }>): [ReadonlyArray<string>, ReadonlyArray<string>] {
