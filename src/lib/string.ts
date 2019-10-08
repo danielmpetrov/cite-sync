@@ -7,7 +7,7 @@ import { defaultTo, replace, split, match, pipe, test } from 'ramda';
 const pattern = /([A-Z\u00C0-\u00DE][a-z\u00DF-\u00FF]+(, |,? and | et al\.)?){1,3} \((\d{4}[a-z]?|n\.d\.)(, p\. \d+)?\)|\((([A-Z\u00C0-\u00DE][a-z\u00DF-\u00FF]+( |,? & |, |,? and | et al\.)?){1,3}, (\d{4}[a-z]?|n\.d\.)(, p\. \d+)?(; )?)+\)/g;
 
 export const defaultToEmptyString = defaultTo('');
-export const removeCitationElements = replace(/\(|\)|,|[A-Z]\.|et al\.|and|&/g, '');
+export const removeCitationElements = replace(/\(|\)|,|[A-Z]\.|et al\.|and|&|p\. \d+/g, '');
 export const removeDoubleSpaces = replace(/ {2,}/g, ' ');
 export const matchCitations = match(pattern);
 export const splitBySpace = split(' ');

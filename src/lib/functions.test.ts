@@ -288,65 +288,6 @@ describe(parseWordParagraphs, () => {
   });
 });
 
-describe(findOrphanedReferences, () => {
-  test('when reference is cited, should return empty array', () => {
-    // Act
-    const citations = [
-      '(Alsmadi and Gan, 2019)'
-    ];
-    const references = [
-      'Alsmadi, I. and Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.'
-    ];
-    const orphanedReferences = findOrphanedReferences(citations, references);
-
-    // Assert
-    expect(orphanedReferences.length).toBe(0);
-  });
-
-  test('when reference is cited and citation contains double space, should return empty array', () => {
-    // Act
-    const citations = [
-      '(Alsmadi and  Gan, 2019)'
-    ];
-    const references = [
-      'Alsmadi, I. and Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.'
-    ];
-    const orphanedReferences = findOrphanedReferences(citations, references);
-
-    // Assert
-    expect(orphanedReferences.length).toBe(0);
-  });
-
-  test('when reference with et al. is cited, should return empty array', () => {
-    // Act
-    const citations = [
-      '(Al Shbail et al., 2018b)'
-    ];
-    const references = [
-      'Al Shbail, M., Salleh, Z. and Mohd Nor, M.N. 2018b, "Antecedents of Burnout and its Relationship to Internal Audit Quality", Business and Economic Horizons, vol. 14, no. 4, pp. 789-817, doi: 10.15208/beh.2018.55.'
-    ];
-    const orphanedReferences = findOrphanedReferences(citations, references);
-
-    // Assert
-    expect(orphanedReferences.length).toBe(0);
-  });
-
-  test('when reference is not cited, should return array with the orphaned reference', () => {
-    // Act
-    const citations = [
-      '(Doe, 2019)'
-    ];
-    const references = [
-      'Alsmadi, I. and Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.'
-    ];
-    const orphanedReferences = findOrphanedReferences(citations, references);
-
-    // Assert
-    expect(orphanedReferences.length).toBe(1);
-    expect(orphanedReferences[0]).toBe('Alsmadi, I. and Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.');
-  });
-});
-
 describe(findOrphanedCitations, () => {
   test('when citation is referenced, should return empty array', () => {
     // Act
@@ -417,5 +358,79 @@ describe(findOrphanedCitations, () => {
 
     // Assert
     expect(orphanedCitations.length).toBe(0);
+  });
+});
+
+describe(findOrphanedReferences, () => {
+  test('when reference is cited, should return empty array', () => {
+    // Act
+    const citations = [
+      '(Alsmadi and Gan, 2019)'
+    ];
+    const references = [
+      'Alsmadi, I. and Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.'
+    ];
+    const orphanedReferences = findOrphanedReferences(citations, references);
+
+    // Assert
+    expect(orphanedReferences.length).toBe(0);
+  });
+
+  test('when reference is cited and citation contains double space, should return empty array', () => {
+    // Act
+    const citations = [
+      '(Alsmadi and  Gan, 2019)'
+    ];
+    const references = [
+      'Alsmadi, I. and Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.'
+    ];
+    const orphanedReferences = findOrphanedReferences(citations, references);
+
+    // Assert
+    expect(orphanedReferences.length).toBe(0);
+  });
+
+  test('when reference with et al. is cited, should return empty array', () => {
+    // Act
+    const citations = [
+      '(Al Shbail et al., 2018b)'
+    ];
+    const references = [
+      'Al Shbail, M., Salleh, Z. and Mohd Nor, M.N. 2018b, "Antecedents of Burnout and its Relationship to Internal Audit Quality", Business and Economic Horizons, vol. 14, no. 4, pp. 789-817, doi: 10.15208/beh.2018.55.'
+    ];
+    const orphanedReferences = findOrphanedReferences(citations, references);
+
+    // Assert
+    expect(orphanedReferences.length).toBe(0);
+  });
+
+  test('when reference with page number is cited, should return empty array', () => {
+    // Act
+    const citations = [
+      'Girdano and Everly (1986, p. 5)'
+    ];
+    const references = [
+      // reference does not contain page number
+      'Girdano, D. and Everly, G.S. 1986, Controlling stress and tension. (2nd ed.), Prentice-Hall, Englewood Cliffs, NJ.'
+    ];
+    const orphanedReferences = findOrphanedReferences(citations, references);
+
+    // Assert
+    expect(orphanedReferences.length).toBe(0);
+  });
+
+  test('when reference is not cited, should return array with the orphaned reference', () => {
+    // Act
+    const citations = [
+      '(Doe, 2019)'
+    ];
+    const references = [
+      'Alsmadi, I. and Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.'
+    ];
+    const orphanedReferences = findOrphanedReferences(citations, references);
+
+    // Assert
+    expect(orphanedReferences.length).toBe(1);
+    expect(orphanedReferences[0]).toBe('Alsmadi, I. and Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.');
   });
 });
