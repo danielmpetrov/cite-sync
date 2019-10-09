@@ -1,9 +1,10 @@
 import { defaultTo, map, prop, filter, pipe, any, trim, all, curry, flatten, includes, findIndex, length, reject, isEmpty } from 'ramda';
-import { defaultToEmptyString, removeDoubleSpaces, matchCitations, splitBySemicolon, clean, splitBySpace, isReferencesTitle, removeParenthesesIfOdd, splitAtRemove } from './string'
+import { defaultToEmptyString, removeDoubleSpaces, matchCitations, splitBySemicolon, clean, splitBySpace, isReferencesTitle, removeParenthesesIfOdd, splitAtRemove, removeLinkingWords } from './string'
 
 export const findCitations: (text: string) => ReadonlyArray<string> = pipe(
   defaultToEmptyString,
   removeDoubleSpaces,
+  removeLinkingWords,
   matchCitations,
   map(splitBySemicolon),
   flatten,
