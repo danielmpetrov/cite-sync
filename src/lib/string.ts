@@ -1,5 +1,5 @@
 import {
-    defaultTo, replace, split, match, pipe, test, __, length, mathMod, equals, identity, ifElse
+    defaultTo, replace, split, match, pipe, test, __, length, mathMod, equals, identity, ifElse, slice
 } from 'ramda';
 
 // Patterns
@@ -27,6 +27,8 @@ export const defaultToEmptyString = defaultTo('');
 // Splitters
 export const splitBySpace = split(' ');
 export const splitBySemicolon = split(';');
+export const splitAtRemove =
+    <T>(index: number, list: ReadonlyArray<T>): [ReadonlyArray<T>, ReadonlyArray<T>] => [slice(0, index, list), slice(index + 1, Infinity, list)];
 
 // Predicates
 export const isReferencesTitle = test(referencesTitle);
