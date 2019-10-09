@@ -346,6 +346,21 @@ describe(findOrphanedCitations, () => {
     expect(orphanedCitations.length).toBe(0);
   });
 
+  test('when citation is referenced and multiple references are present, should return empty array', () => {
+    // Act
+    const citations = [
+      'Jones (1991)'
+    ];
+    const references = [
+      'Jones, T.M. 1991, "Ethical decision making by individual in organisations: an issue-contingent model", Academy of Management Review, vol. 16, no. 2, pp. 366-395.',
+      'Alsmadi, I. and Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.',
+    ];
+    const orphanedCitations = findOrphanedCitations(citations, references);
+
+    // Assert
+    expect(orphanedCitations.length).toBe(0);
+  });
+
   test('when citation containing et al. is referenced, should return empty array', () => {
     // Act
     const citations = [
@@ -380,6 +395,21 @@ describe(findOrphanedReferences, () => {
     // Act
     const citations = [
       '(Alsmadi and  Gan, 2019)'
+    ];
+    const references = [
+      'Alsmadi, I. and Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.'
+    ];
+    const orphanedReferences = findOrphanedReferences(citations, references);
+
+    // Assert
+    expect(orphanedReferences.length).toBe(0);
+  });
+
+  test('when reference is cited and multiple citations are present, should return empty array', () => {
+    // Act
+    const citations = [
+      '(Alsmadi and Gan, 2019)',
+      'Jones (1991)',
     ];
     const references = [
       'Alsmadi, I. and Gan, K. (2019). Review of short-text classification. International Journal of Web Information Systems.'
