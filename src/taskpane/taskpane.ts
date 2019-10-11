@@ -1,8 +1,9 @@
 import { parseWordParagraphs, findOrphanedReferences, findOrphanedCitations, extractCitations } from '../lib/functions';
-import { renderCongratulations, renderInfo, renderReferencesError, renderTop20Warning, renderCitationsError, renderCitation } from './render';
+import { congratulations, info, renderOrphanedCitations, renderOrphanedReferences } from './render';
 import debounce = require('lodash.debounce');
 
-let output: HTMLElement;
+let render: (html: string) => string;
+let renderAppend: (html: string) => string;
 
 Office.onReady(info => {
   if (info.host === Office.HostType.Word) {
@@ -12,8 +13,10 @@ Office.onReady(info => {
       leading: true,
       trailing: false
     });
-    output = document.getElementById('output');
+    const output = document.getElementById('output');
     output.onclick = selectCitation;
+    render = (html: string) => output.innerHTML = html;
+    renderAppend = (html: string) => output.innerHTML += html;
   }
 });
 
@@ -26,52 +29,19 @@ async function analyze() {
     const citations = extractCitations(paragraphs);
 
     if (citations.length === 0 && references.length === 0) {
-      output.innerHTML = renderCongratulations;
+      render(congratulations);
       return;
     }
 
-    output.innerHTML = renderInfo(citations.length, references.length);
+    const i = info(citations.length, references.length);
+    render(i);
 
     const orphanedCitations = findOrphanedCitations(citations, references);
     const orphanedReferences = findOrphanedReferences(citations, references);
 
-    renderOrphanedCitations(output, orphanedCitations);
-    renderOrphanedReferences(output, orphanedReferences);
+    renderOrphanedCitations(renderAppend, orphanedCitations);
+    renderOrphanedReferences(renderAppend, orphanedReferences);
   }).catch(console.log);
-}
-
-function renderOrphanedReferences(output: HTMLElement, references: ReadonlyArray<string>) {
-  if (references.length === 0) {
-    return;
-  }
-
-  output.innerHTML += renderReferencesError(references.length);
-
-  if (references.length > 20) {
-    output.innerHTML += renderTop20Warning;
-    for (let i = 0; i < 20; i++) {
-      output.innerHTML += `<p>${references[i]}</p>`;
-    }
-  } else {
-    references.forEach(reference => output.innerHTML += `<p>${reference}</p>`);
-  }
-}
-
-function renderOrphanedCitations(output: HTMLElement, citations: ReadonlyArray<string>) {
-  if (citations.length === 0) {
-    return;
-  }
-
-  output.innerHTML += renderCitationsError(citations.length);
-
-  if (citations.length > 20) {
-    output.innerHTML += renderTop20Warning;
-    for (let i = 0; i < 20; i++) {
-      output.innerHTML += renderCitation(citations[i]);
-    }
-  } else {
-    citations.forEach(citation => output.innerHTML += renderCitation(citation));
-  }
 }
 
 async function selectCitation(event: any) {
