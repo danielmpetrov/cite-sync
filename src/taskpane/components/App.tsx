@@ -90,22 +90,6 @@ export default class App extends React.Component<AppProps, AppState> {
     trailing: false
   });
 
-  selectCitation = async (event: any) => {
-    if (!event.target.classList.contains('citation-link')) {
-      return;
-    }
-
-    const citation: string = event.target.innerText.trim();
-
-    return Word.run(async context => {
-      const result = context.document.body.search(citation, { ignoreSpace: true }).load('text');
-      await context.sync();
-
-      result.items[0].select();
-      await context.sync();
-    }).catch(console.log);
-  }
-
   render() {
     if (!this.props.isOfficeInitialized) {
       return <Progress />;

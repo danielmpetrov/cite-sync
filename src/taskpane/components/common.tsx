@@ -64,10 +64,27 @@ export const ReferenceErrors = (props: { count: number }) =>
     </span>
   </p>;
 
-export const Citation = (props: { citation: string }) =>
-  <div role="button" className="ms-welcome__action ms-Button ms-Button--hero ms-font-sm">
-    <span className="ms-Button-label citation-link">{props.citation}</span>
-  </div>;
+export class Citation extends React.Component<{ citation: string }> {
+  selectCitation = async () => {
+    const citation = this.props.citation;
+
+    return Word.run(async context => {
+      const result = context.document.body.search(citation, { ignoreSpace: true }).load('text');
+      await context.sync();
+
+      result.items[0].select();
+      await context.sync();
+    }).catch(console.log);
+  }
+
+  render() {
+    return (
+      <div onClick={this.selectCitation.bind(this)} role="button" className="ms-welcome__action ms-Button ms-Button--hero ms-font-sm">
+        <span className="ms-Button-label citation-link">{this.props.citation}</span>
+      </div>
+    );
+  }
+}
 
 export const Reference = (props: { reference: string }) => <p>{props.reference}</p>;
 export const top20 = take(20);
