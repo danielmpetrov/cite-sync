@@ -19,7 +19,7 @@ header {
     height: 100px;
 }
 
-.ms-welcome__main {
+.container {
     display: -webkit-flex;
     display: flex;
     -webkit-flex-direction: column;
@@ -33,23 +33,18 @@ header {
     padding: 10px 20px;
 }
 
-.ms-welcome__main > h2 {
-    width: 100%;
-    text-align: center;
-}
-
-.ms-welcome__features {
+.features {
     list-style-type: none;
     margin-top: 20px;
 }
 
-.ms-welcome__features.ms-List .ms-ListItem {
+.features__item {
     padding-bottom: 20px;
     display: -webkit-flex;
     display: flex;
 }
 
-.ms-welcome__features.ms-List .ms-ListItem > .ms-Icon {
+.features__item > .ms-Icon {
     margin-right: 10px;
 }
 
